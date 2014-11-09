@@ -76,6 +76,7 @@ class WeaselDiesel
       rescue ParamsVerification::ParamError => e
         LOGGER.error e.message
         LOGGER.error "passed params: #{app.params.inspect}"
+        LOGGER.error "request-from: #{@env['REMOTE_ADDR']} #{@env['REMOTE_HOSTNAME']}"
         if self.respond_to?(:params_exception_handler)
           params_exception_handler(e)
         else
