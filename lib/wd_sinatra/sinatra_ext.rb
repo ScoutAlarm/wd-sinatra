@@ -38,7 +38,7 @@ class WeaselDiesel
     # @api public
     attr_accessor :params
 
-    attr_accessor :current_user
+    attr_accessor :current_member
 
     # The service controller might be loaded outside of a Sinatra App
     # in this case, we don't need to load the helpers
