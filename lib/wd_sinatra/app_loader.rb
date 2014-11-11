@@ -13,6 +13,7 @@ module WDSinatra
     def server(sinatra_app=nil)
       raise StandardError, "WDSinatra::AppLoader#setup must be run first." unless root_path
       unless @server_loaded
+        load_middlewares
         set_sinatra_settings
         set_sinatra_routes(sinatra_app)
         load_hooks
@@ -106,6 +107,14 @@ module WDSinatra
       WSList.sorted_for_sinatra_load.each{|api| api.load_sinatra_route(sinatra_app) }
     end
 
+    def load_middlewares
+      require 'wd_sinatra/middleware/authentication'
+
+      Dir.glob(File.join(root_path, "config", "middleware", "**", "*.rb")).each do |middleware|
+        require middleware
+      end
+    end
+
     def set_sinatra_settings
       require File.join(root_path, 'config', 'sinatra_config')
     end
@@ -116,6 +125,8 @@ module WDSinatra
         require 'hooks'
       end
     end
+
+
 
   end
 end

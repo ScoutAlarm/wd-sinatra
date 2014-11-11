@@ -2,6 +2,9 @@ module WDSinatraHooks
 
   MOBILE_X_HEADER   = 'HTTP_X_MOBILE_TOKEN'
   INTERNAL_X_HEADER = 'HTTP_X_INTERNAL_API_KEY'
+  MEMBER_X_GLOBAL_ID_HEADER = 'HTTP_X_MEMBER_GLOBAL_ID'
+
+
   SUPPORTED_MEDIA_TYPES = {
     "application/json" => :json,
     "application/xml" => :xml,
@@ -66,29 +69,18 @@ module WDSinatraHooks
 
     content_type env["wd.format"], charset: "utf-8"
 
-    if service.extra[:mobile]
-      mobile_auth_check
-    elsif service.extra[:internal]
-      internal_api_key_check
-    elsif !service.auth_required
-      return
-    else
-      halt 403 # protect by default
+    http_member_x_global_id = env[MEMBER_X_GLOBAL_ID_HEADER]
+    if http_member_x_global_id
+      service.alpha_handler.current_member = Member.find_by_global_id(http_member_x_global_id)
+      allowed_to_access = service.allowed_to_access?(self)
+
+      unless allowed_to_access
+        LOGGER.error "Service Not Allowed Access"
+        LOGGER.error "params: #{params}"
+        halt 403, "access denied!"
+      end
     end
-  end
 
-  #########################################
-
-  # AUTHENTICATION
-
-  # Implementation example
-  def mobile_auth_check
-    true
-  end
-
-  # Implementation example
-  def internal_api_key_check
-    true
   end
 
 end

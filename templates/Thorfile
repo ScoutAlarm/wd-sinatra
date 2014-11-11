@@ -34,11 +34,11 @@ class Default < Thor
           end
         end
 
-        # DOCUMENTATION
-        service.documentation do |doc|
-          doc.overall "This service provides a simple hello world implementation example."
-          doc.example "<code>curl -I 'http://localhost:9292/hello_world?name=Matt'</code>"
+        # MOBILE ACCESS
+        service.allowed_to_access?
+          false
         end
+
 
         # ACTION/IMPLEMENTATION
         service.implementation do
