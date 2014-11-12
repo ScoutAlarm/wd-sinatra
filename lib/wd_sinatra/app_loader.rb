@@ -5,7 +5,19 @@ require 'sinatra/base'
 require 'weasel_diesel'
 require 'wd_sinatra/ws_list_ext'
 
+require 'active_support'
+
 module WDSinatra
+  class << self
+    def cache
+      @_cache ||= ActiveSupport::Cache.lookup_store(:memory_store)
+    end
+
+    def cache=(store_option)
+      @_cache = ActiveSupport::Cache.lookup_store(store_option)
+    end
+  end
+
   module AppLoader
     module_function
 

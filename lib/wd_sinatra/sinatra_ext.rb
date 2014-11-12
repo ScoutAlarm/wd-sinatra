@@ -128,5 +128,4 @@ class WeaselDiesel
     end
 
   end
-
 end
