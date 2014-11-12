@@ -31,7 +31,7 @@ module WDSinatra
       end
 
       def mobile_auth_check(http_mobile_x_header)
-        mobile_token_cache_expiration = ENV['MOBILE_TOKEN_CACHE_EXPIRATION'] ||= 60
+        mobile_token_cache_expiration = ENV['MOBILE_TOKEN_CACHE_EXPIRATION'] ||= 5
         cached_valid_auth_result = WDSinatra.cache.fetch(http_mobile_x_header.to_sym, expires_in: mobile_token_cache_expiration.to_i.minutes) do
           data = ScoutApiClient::Auth::MobileToken.valid?(http_mobile_x_header)
           valid = data[:token_valid]
